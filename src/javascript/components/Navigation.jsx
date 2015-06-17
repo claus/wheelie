@@ -10,15 +10,11 @@ var Navigation = React.createClass({
     },
 
     render: function() {
-        var isActive = this.context.router.isActive;
-        var homeClass = isActive('/') ? 'selected' : '';
-        var collectClass = isActive('/collect') ? 'selected' : '';
-        var resultsClass = isActive('/results') ? 'selected' : '';
         return (
             <ul className="navigation">
-                <li className={homeClass}><Link to='/'>Wheelie</Link></li>
-                <li className={collectClass}><Link to='/collect'>Collect</Link></li>
-                <li className={resultsClass}><Link to='/results'>Results</Link></li>
+                <li><Link to='/'>Wheelie</Link></li>
+                <li><Link to='/collect'>Collect</Link></li>
+                <li><Link to='/results'>Results</Link></li>
             </ul>
         );
     }

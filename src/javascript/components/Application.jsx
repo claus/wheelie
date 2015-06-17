@@ -14,6 +14,10 @@ var Application = React.createClass({
         storeListeners: [ApplicationStore]
     },
 
+    componentDidMount: function () {
+        require('../lib/performance-now-polyfill');
+    },
+
     getInitialState: function () {
         return this.getStore(ApplicationStore).getState();
     },

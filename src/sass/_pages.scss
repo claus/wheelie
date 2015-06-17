@@ -2,5 +2,11 @@
 // Pages
 // ---------------------------
 
-// @import "pages/*";
+.page {
+    @extend %spread;
+    padding: 6rem 2rem 0 2rem;
+}
+
 @import "pages/home";
+@import "pages/collect";
+@import "pages/notFound";

@@ -4,8 +4,31 @@
 
 button {
     background-color: transparent;
-    border: none;
-    padding: 0;
+    border: 2px solid #666;
+    border-radius: 4px;
+    padding: 0.5rem 2rem;
+
+    &.red {
+        border: 2px solid #a00;
+        &:hover {
+            border: 2px solid #a00;
+            background-color: #a00;
+        }
+    }
+
+    &.green {
+        border: 2px solid #0a0;
+        &:hover {
+            border: 2px solid #0a0;
+            background-color: #0a0;
+        }
+    }
+
+    &:hover {
+        border: 2px solid #666;
+        background-color: #666;
+        color: white;
+    }
 }
 
 .btn {
