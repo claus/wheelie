@@ -1,18 +1,18 @@
 {
-  "name": "react-gulp-starter",
-  "version": "0.2.0",
+  "name": "wheelie",
+  "version": "0.1.0",
   "engines": {
     "node": ">=0.12"
   },
   "private": true,
-  "description": "React-Gulp starter with common tasks and scenarios",
+  "description": "A tool to collect and profile mouse wheel data from various input devices",
   "scripts": {
     "postinstall": "gulp production",
     "start": "node server.js"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/MadeInHaus/react-gulp-starter.git"
+    "url": "git://github.com/claus/wheelie.git"
   },
   "browserify": {
     "transform": [
@@ -20,7 +20,7 @@
     ]
   },
   "devDependencies": {
-    "browser-sync": "~2.6.4",
+    "browser-sync": "~2.7.2",
     "browserify": "^8.0.2",
     "browserify-shim": "^3.8.2",
     "connect-modrewrite": "^0.7.9",

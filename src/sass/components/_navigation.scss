@@ -1,16 +1,24 @@
 .navigation {
+    position: fixed;
     padding: 0;
+    margin: 0;
+    height: 4rem;
 
     li {
-        display: block;
-        line-height: 1.5;
+        display: inline-block;
+        border-right: 1px solid #aaa;
+        border-bottom: 1px solid #aaa;
 
-        a {
-            text-decoration: none;
+        &:hover {
+            background-color: #eee;
         }
 
-        a:hover {
-            text-decoration: underline;
+
+        a {
+            display: inline-block;
+            padding: 0 1rem;
+            line-height: 4rem;
+            text-decoration: none;
         }
 
         &.selected a {

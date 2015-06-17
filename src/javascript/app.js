@@ -7,6 +7,5 @@ var app = new Fluxible({
 });
 
 app.registerStore(require('./stores/ApplicationStore'));
-app.registerStore(require('./stores/TimeStore'));
 
 module.exports = app;

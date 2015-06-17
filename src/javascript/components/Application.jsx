@@ -3,7 +3,6 @@
 var React = require('react');
 var FluxibleMixin = require('fluxible/addons/FluxibleMixin');
 var Navigation = require('./Navigation.jsx');
-var Timestamp = require('./Timestamp.jsx');
 var ApplicationStore = require('../stores/ApplicationStore');
 var RouteHandler = require('react-router').RouteHandler;
 
@@ -33,9 +32,6 @@ var Application = React.createClass({
                 <main>
                     <RouteHandler />
                 </main>
-                <footer>
-                    <Timestamp />
-                </footer>
             </div>
         );
     }

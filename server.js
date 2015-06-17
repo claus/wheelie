@@ -41,7 +41,8 @@ server.use(function (req, res, next) {
             ));
 
             var html = React.renderToStaticMarkup(HtmlComponent({
-                title: "react-flux-gulp-starter",
+                title: 'Wheelie',
+                description: 'A tool to collect and profile mouse wheel data from various input devices',
                 state: res.locals.state,
                 markup: markup
             }));

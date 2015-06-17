@@ -7,8 +7,7 @@ var Home = React.createClass({
     render: function() {
         return (
             <div>
-                <h1>Welcome to react-flux-gulp-starter!</h1>
-                <p>Clone on <a href="https://github.com/MadeInHaus/react-flux-gulp-starter">GitHub</a></p>
+                <h1>Welcome to Wheelie!</h1>
                 <p>Made in <a href="http://madeinhaus.com/">HAUS</a></p>
             </div>
         );
