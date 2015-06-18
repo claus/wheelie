@@ -1,12 +1,22 @@
 'use strict';
 
 var React = require('react');
+var FluxibleMixin = require('fluxible/addons/FluxibleMixin');
+var EventsStore = require('../stores/EventsStore');
 var submitEvents = require('../actions/submitEvents');
+var ChartAbs = require('./ChartAbs');
+var ChartDelta = require('./ChartDelta');
 
 var wheelTimeoutId;
 var buffer = [];
 
 var Collect = React.createClass({
+
+    mixins: [FluxibleMixin],
+
+    statics: {
+        storeListeners: [EventsStore]
+    },
 
     contextTypes: {
         executeAction: React.PropTypes.func.isRequired
@@ -35,17 +45,18 @@ var Collect = React.createClass({
         wheelTimeoutId = setTimeout(this.onWheelTimeout, 500);
     },
 
+    onStart: function () {
+        this.setState({
+            step: 'collecting',
+            isCollecting: true,
+            buffer: []
+        });
+    },
+
     onWheelTimeout: function () {
         this.setState({
             step: 'finished',
             isCollecting: false
-        });
-    },
-
-    onStart: function () {
-        this.setState({
-            step: 'collecting',
-            isCollecting: true
         });
     },
 
@@ -58,6 +69,13 @@ var Collect = React.createClass({
             step: 'submitting',
             isCollecting: false,
             buffer: []
+        });
+    },
+
+    onChange: function () {
+        this.setState({
+            step: 'idle',
+            isCollecting: false
         });
     },
 
@@ -79,6 +97,12 @@ var Collect = React.createClass({
                             <button className="btn red" onClick={this.onStart}>Retry</button>
                             <button className="btn green" onClick={this.onSubmit}>Submit</button>
                         </p>
+                        <div className="canvas-container">
+                            <ChartAbs width={950} height={150} data={this.state.buffer} />
+                        </div>
+                        <div className="canvas-container">
+                            <ChartDelta width={950} height={150} data={this.state.buffer} />
+                        </div>
                     </div>
                 );
             case 'submitting':
