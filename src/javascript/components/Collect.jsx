@@ -85,14 +85,32 @@ var Collect = React.createClass({
                 return (<button className="btn green" onClick={this.onStart}>Start</button>);
             case 'collecting':
                 if (this.state.buffer.length) {
-                    return (<div>Collecting data.. {this.state.buffer.length}</div>);
+                    return (<div><p>Collecting data.. {this.state.buffer.length}</p></div>);
                 } else {
-                    return (<div>Please start scrolling..</div>);
+                    return (
+                        <div>
+                            <p>
+                                Use your input device (TrackPad, MouseWheel, etc.) to scroll down once,
+                                as you would if you wanted to scroll down one page.
+                            </p>
+                            <p>
+                                Data collection stops automatically after 500ms of inactivity.
+                            </p>
+                            <p>
+                                Touch events are not supported, we are currently only interested in non-touch.
+                            </p>
+                            <p className="cta">
+                                Please start scrolling now!
+                            </p>
+                        </div>
+                    );
                 }
             case 'finished':
                 return (
                     <div>
-                        Done collecting data. {this.state.buffer.length} events captured.
+                        <p>
+                            Done collecting data. {this.state.buffer.length} events captured.
+                        </p>
                         <p className="btn-container">
                             <button className="btn red" onClick={this.onStart}>Retry</button>
                             <button className="btn green" onClick={this.onSubmit}>Submit</button>
@@ -106,7 +124,7 @@ var Collect = React.createClass({
                     </div>
                 );
             case 'submitting':
-                return (<div>Submitting..</div>);
+                return (<div><p>Submitting..</p></div>);
         }
     },
 
