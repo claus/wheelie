@@ -74,7 +74,7 @@ var Collect = React.createClass({
 
     onChange: function () {
         this.setState({
-            step: 'idle',
+            step: 'thanks',
             isCollecting: false
         });
     },
@@ -125,6 +125,15 @@ var Collect = React.createClass({
                 );
             case 'submitting':
                 return (<div><p>Submitting..</p></div>);
+            case 'thanks':
+                return (
+                    <div>
+                        <p>Thanks!</p>
+                        <p className="btn-container">
+                            <button className="btn red" onClick={this.onStart}>Retry</button>
+                        </p>
+                    </div>
+                );
         }
     },
 
