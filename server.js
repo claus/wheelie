@@ -4,8 +4,13 @@
 
 require('node-jsx').install({ extension: '.jsx' })
 
+var fs = require('fs');
 var express = require('express');
 var expressState = require('express-state');
+var mongoose = require("mongoose");
+var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
+var csrf = require('csurf');
 var debug = require('debug')('Server');
 var React = require('react');
 var Router = require('react-router');
@@ -16,43 +21,92 @@ var navigateAction = require('./src/javascript/actions/navigate');
 
 var server = express();
 
-expressState.extend(server);
+var connection = mongoose.connection;
+connection.on("open", dbOpen);
+connection.on("error", dbError);
 
-server.use('/', express.static(__dirname + '/build'));
+mongoose.connect(
+  process.env.MONGOLAB_URI || "mongodb://localhost/wheelie",
+  { server: { keepAlive: 1, auto_reconnect: true } }
+);
 
-server.use(function (req, res, next) {
-    var context = app.createContext();
+function dbOpen() {
 
-    Router.run(app.getComponent(), req.path, function (Handler, state) {
+    var db = this.db;
 
-        context.executeAction(navigateAction, state, function (err) {
+    var modelsPath = __dirname + "/src/javascript/models";
+    fs.readdirSync(modelsPath).forEach(function(file) {
+        if (file.indexOf(".js") >= 0) {
+            var modelName = file.replace(".js", "");
+            db[modelName] = require(modelsPath + "/" + file)(mongoose);
+            console.log("Model " + modelName + " initialized");
+        }
+    });
 
-            var appState = app.dehydrate(context);
+    expressState.extend(server);
 
-            res.expose(appState, 'App');
+    server.use('/', express.static(__dirname + '/build'));
+    server.use(cookieParser());
+    server.use(bodyParser.json());
+    server.use(csrf({ cookie: true }));
 
-            var HtmlComponent = React.createFactory(Html);
-            var HandlerComponent = React.createFactory(Handler);
+    var eventsService = require('./src/javascript/services/events');
+    eventsService.db = db;
 
-            var markup = React.renderToString(React.createElement(
-                FluxibleComponent,
-                { context: context.getComponentContext() },
-                HandlerComponent()
-            ));
+    var fetchrPlugin = app.getPlugin('FetchrPlugin');
+    fetchrPlugin.registerService(eventsService);
+    server.use(fetchrPlugin.getXhrPath(), fetchrPlugin.getMiddleware());
 
-            var html = React.renderToStaticMarkup(HtmlComponent({
-                title: 'Wheelie',
-                description: 'A tool to collect and profile mouse wheel data from various input devices',
-                state: res.locals.state,
-                markup: markup
-            }));
+    server.use(function (req, res, next) {
+        var context = app.createContext({
+            req: req,
+            xhrContext: {
+                _csrf: req.csrfToken()
+            }
+        });
 
-            res.send('<!doctype html>' + html);
+        Router.run(app.getComponent(), req.path, function (Handler, state) {
 
+            context.executeAction(navigateAction, state, function (err) {
+
+                var appState = app.dehydrate(context);
+
+                res.expose(appState, 'App');
+
+                var HtmlComponent = React.createFactory(Html);
+                var HandlerComponent = React.createFactory(Handler);
+
+                var markup = React.renderToString(React.createElement(
+                    FluxibleComponent,
+                    { context: context.getComponentContext() },
+                    HandlerComponent()
+                ));
+
+                var html = React.renderToStaticMarkup(HtmlComponent({
+                    title: 'Wheelie',
+                    description: 'A tool to collect and profile mouse wheel data from various input devices',
+                    state: res.locals.state,
+                    markup: markup
+                }));
+
+                res.send('<!doctype html>' + html);
+
+            });
         });
     });
+
+    var port = process.env.PORT || 3000;
+    server.listen(port);
+    debug('Listening on port ' + port);
+}
+
+function dbError() {
+    debug("Mongoose failed to connect");
+}
+
+process.on('exit', function () {
+    console.log('Mongoose disconnecting');
+    mongoose.disconnect();
+    server.close();
 });
 
-var port = process.env.PORT || 3000;
-server.listen(port);
-debug('Listening on port ' + port);

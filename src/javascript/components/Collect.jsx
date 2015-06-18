@@ -1,17 +1,22 @@
 'use strict';
 
 var React = require('react');
+var submitEvents = require('../actions/submitEvents');
 
 var wheelTimeoutId;
 var buffer = [];
 
 var Collect = React.createClass({
 
+    contextTypes: {
+        executeAction: React.PropTypes.func.isRequired
+    },
+
     getInitialState: function () {
         return {
+            step: 'idle',
             isCollecting: false,
-            buffer: [],
-            step: 'idle'
+            buffer: []
         };
     },
 
@@ -45,9 +50,14 @@ var Collect = React.createClass({
     },
 
     onSubmit: function () {
+        this.context.executeAction(submitEvents, {
+            createdAt: new Date(),
+            events: this.state.buffer.concat()
+        });
         this.setState({
             step: 'submitting',
-            isCollecting: false
+            isCollecting: false,
+            buffer: []
         });
     },
 
