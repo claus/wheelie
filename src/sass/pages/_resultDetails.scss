@@ -1,5 +1,14 @@
 .result-details {
+    overflow-y: auto;
     .canvas-container {
         margin-top: 2rem;
+    }
+    table {
+        margin-bottom: 4rem;
+
+        td, th {
+        text-align: right;
+            padding: 0.2rem 1rem;
+        }
     }
 }
