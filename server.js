@@ -8,6 +8,7 @@ var fs = require('fs');
 var express = require('express');
 var expressState = require('express-state');
 var mongoose = require("mongoose");
+var compress = require('compression');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var csrf = require('csurf');
@@ -46,6 +47,7 @@ function dbOpen() {
 
     expressState.extend(server);
 
+    server.use(compress());
     server.use('/', express.static(__dirname + '/build'));
     server.use(cookieParser());
     server.use(bodyParser.json());
