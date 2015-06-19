@@ -27,7 +27,7 @@ var ResultsDetail = React.createClass({
             var timeDelta = ((i > 0) ? Math.round((item.time - doc.events[i - 1].time) * 1000) / 1000 : 0).toFixed(3);
             var y = Math.round(item.y);
             var yDelta = (i > 0) ? y - Math.round(doc.events[i - 1].y) : 0;
-            yTotal += item.y;
+            yTotal += y;
             return (
                 <tr key={Math.round(item.time * 1000)}>
                     <td>{time}</td>
