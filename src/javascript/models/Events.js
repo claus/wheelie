@@ -4,6 +4,7 @@ module.exports = function(mongoose) {
 
     var eventsSchema = new Schema({
             createdAt: Date,
+            userAgent: String,
             events: [{
                 x: Number,
                 y: Number,

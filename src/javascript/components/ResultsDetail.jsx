@@ -23,6 +23,7 @@ var ResultsDetail = React.createClass({
         return (
             <div className="page result-details">
                 <h1>Result {date.toISOString()}:</h1>
+                <p>UserAgent: {doc.userAgent}</p>
                 <div className="canvas-container">
                     <ChartAbs width={950} height={150} data={doc.events} />
                 </div>

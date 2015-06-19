@@ -63,6 +63,7 @@ var Collect = React.createClass({
     onSubmit: function () {
         this.context.executeAction(submitEvents, {
             createdAt: new Date(),
+            userAgent: navigator.userAgent,
             events: this.state.buffer.concat()
         });
         this.setState({
