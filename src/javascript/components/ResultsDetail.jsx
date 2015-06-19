@@ -25,14 +25,15 @@ var ResultsDetail = React.createClass({
         var rows = _.map(doc.events, function(item, i) {
             var time = (Math.round((item.time - firstItem.time) * 1000) / 1000).toFixed(3);
             var timeDelta = ((i > 0) ? Math.round((item.time - doc.events[i - 1].time) * 1000) / 1000 : 0).toFixed(3);
-            var yDelta = (i > 0) ? item.y - doc.events[i - 1].y : 0;
+            var y = Math.round(item.y);
+            var yDelta = (i > 0) ? y - Math.round(doc.events[i - 1].y) : 0;
             yTotal += item.y;
             return (
                 <tr key={Math.round(item.time * 1000)}>
                     <td>{time}</td>
                     <td>{timeDelta}</td>
                     <td>{yTotal}</td>
-                    <td>{item.y}</td>
+                    <td>{y}</td>
                     <td>{yDelta}</td>
                     <td>{item.mode}</td>
                 </tr>
