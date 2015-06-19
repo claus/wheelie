@@ -23,8 +23,7 @@ var Application = React.createClass({
     },
 
     onChange: function () {
-        var state = this.getStore(ApplicationStore).getState();
-        this.setState(state);
+        this.setState(this.getStore(ApplicationStore).getState());
     },
 
     render: function () {

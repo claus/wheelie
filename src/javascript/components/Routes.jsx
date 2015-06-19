@@ -8,12 +8,14 @@ var Application = require('./Application');
 var Home = require('./Home');
 var Collect = require('./Collect');
 var Results = require('./Results');
+var ResultsDetail = require('./ResultsDetail');
 var NotFound = require('./NotFound');
 
 var routes = (
     <Route name="app" path="/" handler={Application}>
         <Route name="collect" handler={Collect} />
         <Route name="results" handler={Results} />
+        <Route name="resultsDetail" path="results/:id" handler={ResultsDetail} />
         <DefaultRoute name="home" handler={Home} />
         <NotFoundRoute handler={NotFound} />
     </Route>

@@ -18,6 +18,7 @@ var FluxibleComponent = require('fluxible/addons/FluxibleComponent');
 var app = require('./src/javascript/app');
 var Html = require('./src/javascript/components/Html.jsx');
 var navigateAction = require('./src/javascript/actions/navigate');
+var loadEvents = require('./src/javascript/actions/loadEvents');
 
 var server = express();
 
@@ -67,30 +68,32 @@ function dbOpen() {
 
         Router.run(app.getComponent(), req.path, function (Handler, state) {
 
-            context.executeAction(navigateAction, state, function (err) {
+            context.executeAction(loadEvents, {}, function (err) {
+                context.executeAction(navigateAction, state, function (err) {
 
-                var appState = app.dehydrate(context);
+                    var appState = app.dehydrate(context);
 
-                res.expose(appState, 'App');
+                    res.expose(appState, 'App');
 
-                var HtmlComponent = React.createFactory(Html);
-                var HandlerComponent = React.createFactory(Handler);
+                    var HtmlComponent = React.createFactory(Html);
+                    var HandlerComponent = React.createFactory(Handler);
 
-                var markup = React.renderToString(React.createElement(
-                    FluxibleComponent,
-                    { context: context.getComponentContext() },
-                    HandlerComponent()
-                ));
+                    var markup = React.renderToString(React.createElement(
+                        FluxibleComponent,
+                        { context: context.getComponentContext() },
+                        HandlerComponent()
+                    ));
 
-                var html = React.renderToStaticMarkup(HtmlComponent({
-                    title: 'Wheelie',
-                    description: 'A tool to collect and profile mouse wheel data from various input devices',
-                    state: res.locals.state,
-                    markup: markup
-                }));
+                    var html = React.renderToStaticMarkup(HtmlComponent({
+                        title: 'Wheelie',
+                        description: 'A tool to collect and profile mouse wheel data from various input devices',
+                        state: res.locals.state,
+                        markup: markup
+                    }));
 
-                res.send('<!doctype html>' + html);
+                    res.send('<!doctype html>' + html);
 
+                });
             });
         });
     });

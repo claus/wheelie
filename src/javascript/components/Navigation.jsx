@@ -14,6 +14,7 @@ var Navigation = React.createClass({
             <ul className="navigation">
                 <li><Link to='/'>Wheelie</Link></li>
                 <li><Link to='/collect'>Collect</Link></li>
+                <li><Link to='/results'>Results</Link></li>
             </ul>
         );
     }

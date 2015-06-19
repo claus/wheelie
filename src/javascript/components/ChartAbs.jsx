@@ -42,7 +42,6 @@ var ChartDelta = React.createClass({
         var deltas = this.getAbs(buffer);
         var scaleV = height / (deltas.maxAbs - deltas.minAbs);
         var scaleH = width / deltas.duration;
-        //console.log(scaleH, deltas.values[deltas.values.length - 1].time, deltas.values[1].time)
         ctx.save();
         ctx.clearRect(0, 0, width, height);
         ctx.translate(0, deltas.maxAbs * scaleV);

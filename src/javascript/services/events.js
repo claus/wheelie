@@ -1,3 +1,5 @@
+var _ = require('lodash');
+
 module.exports = {
 
     name: 'events',
@@ -5,9 +7,16 @@ module.exports = {
     db: null,
 
     read: function (req, resource, params, config, callback) {
-        setTimeout(function () {
-            callback(null, {});
-        }, 10);
+        this.db.Events.find(function (err, docs) {
+            if (err) {
+                callback('DB: error reading events', null);
+                return;
+            }
+            docs = _.map(docs, function (doc) {
+                return doc.toObject();
+            });
+            callback(null, docs);
+        });
     },
 
     create: function (req, resource, params, body, config, callback) {

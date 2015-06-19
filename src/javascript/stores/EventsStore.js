@@ -8,40 +8,50 @@ var EventsStore = createStore({
     storeName: 'EventsStore',
 
     handlers: {
+        'LOAD_EVENTS_END': 'loadEventsEnd',
         'SUBMIT_EVENTS_END': 'submitEventsEnd'
     },
 
     initialize: function () {
-        this.events = [];
-        this.eventsMap = {};
+        this.docs = [];
+        this.docsMap = {};
     },
 
-    submitEventsEnd: function (events) {
-        console.log('EventsStore.submitEventsEnd', events);
-        this.events.push(events);
-        this.eventsMap[events._id] = events;
+    loadEventsEnd: function (events) {
+        _.each(events, function (eventsDoc) {
+            this.docs.push(eventsDoc);
+            this.docsMap[eventsDoc._id] = eventsDoc;
+        }, this);
+        this.docs.sort(function (a, b) { return b.createdAtNum - a.createdAtNum });
+        this.emitChange();
+    },
+
+    submitEventsEnd: function (eventsDoc) {
+        this.docs.push(eventsDoc);
+        this.docs.sort(function (a, b) { return b.createdAtNum - a.createdAtNum });
+        this.docsMap[eventsDoc._id] = eventsDoc;
         this.emitChange();
     },
 
     getAll: function () {
-        return this.events;
+        return this.docs;
     },
 
     getById: function (id) {
-        return this.eventsMap[id];
+        return this.docsMap[id];
     },
 
     dehydrate: function () {
         return {
-            events: this.events
+            docs: this.docs
         };
     },
 
     rehydrate: function (state) {
-        this.events = state.events;
-        this.eventsMap = {};
-        _.each(this.events, function (events) {
-            this.eventsMap[events._id] = events;
+        this.docs = state.docs.sort(function (a, b) { return b.createdAtNum - a.createdAtNum });
+        this.docsMap = {};
+        _.each(this.docs, function (events) {
+            this.docsMap[events._id] = events;
         }, this);
     }
 
